@@ -1,6 +1,6 @@
 {
   "name": "waiting-for-js",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "This is a simple package that has one function, to make Java script wait. ",
   "main": "index.js",
   "scripts": {
