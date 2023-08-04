@@ -1,67 +1,71 @@
-salvery-js
+waiting-for-js
 =======
-#### A simple lib to make manage multiple processes on nodejs. It its makes so that it can scale on multiple machines
+#### A simple class which makes js wait.
 
 ## Installation
+
+You can install the wait class using npm:
+
+```bash
+
+npm install wait-class
 ```
-npm install salvery-js
-```
+
 ## Usage
+Importing the wait class
+
+To use the wait class, you can import it in your JavaScript file:
+
 ```javascript
-import slavery from 'slavery.js';
-
-// make diffrent time outs
-let make_timeout = s =>
-    new Promise( resolve => {
-        setTimeout( () => {
-            resolve(s)
-        }, s * 1000)
-    })
-
-let timeouts = [ 1, 2, 3, 4, 5, 6, 7, 8 ].reverse()
-
-// optinos to pass to the engine    
-let options = {
-    numberOfSlaves: 9, // number of processes to run concurrently, this includes the master process
-    // if this is not set, it will create process relative the the number of cores in the machine
-    port: 3003, // port to be used to communicate between salve and master
-    host: 'localhost', // network host
-}
-
-// create the engine
-    slavery(options)
-        .master( async master => { // initialize the master
-            /* this is the functions that will run in the master */
-            // wait until at least one salve is connected
-            await master.untilConnected();  
-            // random array of big numbers
-            // for every number in the array
-            for (let timeout of timeouts ){
-                // get a slave that is not currely working
-                let slave = await master.getIdel(); 
-                slave.run(timeout)
-                    .then( result => // result returned by slave
-                        console.log( result )
-                    );
-            }
-        })
-.slave( async (parameter, slave) => { // create the salve 
-            /* 
-             * it takes a function which is to be run then master runs: 'slave.run(params)
-             * the params passed to slave.run(params) is the first paramter of this function, in this case 'counter'.
-             * the second is the slave object. 
-             * */
-            let timeout = make_timeout(parameter);
-            let s = await timeout;
-            // run some code
-            if( s > 7 )
-                return { result: `waited for ${s} seconds, 😡` }
-            else if( s > 5 )
-                return { result: `waited for ${s} seconds, 😐` }
-            else if( s > 2  )
-                return { result: `waited for ${s} seconds, 😃` }
-            else
-                return { result: `waited for ${s} seconds, 😄` }
-        })
-});
+const wait = require('waiting-for-js');
 ```
+or 
+
+```javascript
+import wait from 'waiting-for-js'
+```
+
+### Waiting for a Specific Time
+
+You can use the wait.for(seconds) method to pause execution for a specified number of seconds. Here's an example of how to wait for 3 seconds:
+
+```javascript
+
+console.log("Before waiting...");
+await wait.for(3);
+console.log("After waiting for 3 seconds.");
+
+```
+
+### Waiting for a Random Short or Long Time
+
+You can use the wait.for.shortTime() method to wait for a random short time (between 500ms and 2500ms) or wait.for.longTime() to wait for a random long time (between 5000ms and 15000ms). Here's an example of how to use these methods:
+
+```javascript
+
+console.log("Before waiting for a short random time...");
+await wait.for.shortTime();
+console.log("After waiting for a short random time.");
+
+console.log("Before waiting for a long random time...");
+await wait.for.longTime();
+console.log("After waiting for a long random time.");
+```
+
+### Waiting Until a Condition is Met
+
+You can use the wait.until(func) method to wait until a given condition is met. The method will repeatedly check the condition until it evaluates to true. Here's an example of how to use the wait.until method:
+
+```javascript
+
+let counter = 0;
+
+setTimeout(() => {
+counter = 5;
+}, 3000);
+
+console.log("Before waiting until the condition is met...");
+await wait.until(() => counter === 5);
+console.log("After waiting until the condition is met.");
+```
+
