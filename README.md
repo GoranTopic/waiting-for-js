@@ -8,7 +8,7 @@ You can install the wait class using npm:
 
 ```bash
 
-npm install wait-class
+npm install waiting-for-js
 ```
 
 ## Usage
